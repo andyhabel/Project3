@@ -187,9 +187,9 @@ jobs:
       - run:
           name: Configure server
           command: |
-            ls
-            cat inventory.txt
-            ansible-playbook -i inventory.txt ./.circleci/ansible/configure-server.yml
+            ls -l
+            pwd
+            ansible-playbook -i ./.circleci/ansible/inventory.txt ./.circleci/ansible/configure-server.yml
       - destroy-environment:
           workflowID: ${CIRCLE_WORKFLOW_ID:0:7}       
 
