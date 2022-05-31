@@ -227,12 +227,12 @@ jobs:
       - image: amazon/aws-cli
     steps:
       - checkout
-      - attach_workspace:
-          at: .
       - run:
           name: Install dependencies
           command: |
             yum install -y curl tar gzip
+      - attach_workspace:
+          at: .
       - run:
           name: Get backend url
           command: |
@@ -258,9 +258,12 @@ jobs:
     docker:
       - image: python:3.7-alpine3.11
     steps:
-      # Checkout code from git
-      # Add ssh keys with fingerprint
-      # attach workspace
+      - checkout
+      - add_ssh_keys:
+          fingerprints:
+            - "9e:a0:5e:7f:c4:1a:60:f1:a4:aa:72:65:ea:f9:8e:25"
+      - attach_workspace:
+          at: .
       - run:
           name: Install dependencies
           command: |
