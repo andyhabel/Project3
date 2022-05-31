@@ -227,12 +227,12 @@ jobs:
       - image: amazon/aws-cli
     steps:
       - checkout
+      - attach_workspace:
+          at: .
       - run:
           name: Install dependencies
           command: |
-            yum install -y curl
-      - attach_workspace:
-          at: .
+            yum install -y curl tar gzip
       - run:
           name: Get backend url
           command: |
