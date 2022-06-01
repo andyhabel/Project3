@@ -32,7 +32,7 @@ commands:
           command: |
             #get migration result from kvdb
             #SUCCESS=$(curl --request GET  https://kvdb.io/RSgFzhXLyYkGHTFcJWAmew/migration_<< parameters.workflowID >>)
-            EXPORT SUCCESS=1
+            export SUCCESS=1
             echo $SUCCESS
             if(( $SUCCESS==1 )); 
             then
