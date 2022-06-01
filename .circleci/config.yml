@@ -30,7 +30,9 @@ commands:
           name: Revert migrations
           when: on_fail
           command: |
-            SUCCESS=$(curl --request GET  https://kvdb.io/RSgFzhXLyYkGHTFcJWAmew/migration_<< parameters.workflowID >>)
+            #get migration result from kvdb
+            #SUCCESS=$(curl --request GET  https://kvdb.io/RSgFzhXLyYkGHTFcJWAmew/migration_<< parameters.workflowID >>)
+            EXPORT SUCCESS=1
             echo $SUCCESS
             if(( $SUCCESS==1 )); 
             then
@@ -309,7 +311,7 @@ jobs:
              export API_URL="http://${BACKEND_IP}:3030"
              echo "${API_URL}"
              if curl "${API_URL}/api/status" | grep "ok"
-             then return 0
+             then return 1
              else
               return 1
              fi
