@@ -23,20 +23,20 @@ commands:
   revert-migrations:
     description: Revert the last migration if successfully run in the current workflow.
     parameters:
-      # Add parameter here     
+      workflowID:
+        type: string  
     steps:
       - run:
           name: Revert migrations
-          # Add when this will run
+          when: on_fail
           command: |
-            # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
-            SUCCESS = 1
+            SUCCESS=$(curl --request GET  https://kvdb.io/RSgFzhXLyYkGHTFcJWAmew/migration_<< parameters.workflowID >>)
+            echo $SUCCESS
             if(( $SUCCESS==1 )); 
             then
-            #  cd ~/project/backend
-            #  npm install
-            #  Add revert code here. You can find this in the Getting Started section.
-              exit 1
+              cd ~/project/backend
+              npm install
+              npm run migrations:revert
             fi
             
 jobs:
@@ -302,20 +302,17 @@ jobs:
             pip install awscli
             apk add --update curl
       - run:
-          name: Get backend url
+          name: Get backend url and smoke test
           command: |
              BACKEND_IP=$(curl --request GET https://kvdb.io/8E5myACp3tQAPuneCBEqdv/url_${CIRCLE_WORKFLOW_ID:0:7})
              echo "${BACKEND_IP}"
              export API_URL="http://${BACKEND_IP}:3030"
-      - run:
-          name: Backend smoke test.
-          command: |
-            echo "${API_URL}"
-            if curl "${API_URL}/api/status" | grep "ok"
+             echo "${API_URL}"
+             if curl "${API_URL}/api/status" | grep "ok"
              then return 0
-            else
-             return 1
-            fi
+             else
+              return 1
+             fi
       - run:
           name: Frontend smoke test.
           command: |
